@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>گروه دهم | سایت ثبت تکالیف درسی</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn', sans-serif; }
 
@@ -467,11 +466,6 @@ header {
 }
 
 .hidden { display:none !important; }
-
-/* تقویم شمسی */
-.datepicker-plot-area {
-  font-family: 'Vazirmatn', sans-serif !important;
-}
 </style>
 </head>
 <body>
@@ -562,7 +556,7 @@ header {
     <div class="admin-section">
       <h4>📝 افزودن تکلیف</h4>
       <select class="admin-select" id="taskBookSelect"></select>
-      <input class="admin-input" type="text" id="taskDate" placeholder="📅 انتخاب تاریخ تحویل" readonly>
+      <input class="admin-input" type="text" id="taskDate" placeholder="📅 تاریخ تحویل (مثال: 1405/07/05)" maxlength="10" inputmode="numeric">
       <textarea class="admin-textarea" id="taskDesc" placeholder="توضیحات (اختیاری)"></textarea>
       <button class="admin-btn" onclick="addTask()">➕ افزودن تکلیف</button>
     </div>
@@ -585,9 +579,6 @@ header {
   </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://unpkg.com/persian-date@1.1.0/dist/persian-date.min.js"></script>
-<script src="https://unpkg.com/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
 <script>
 // ===== داده‌ها =====
 let data = { books: [], tasks: [] };
@@ -647,6 +638,19 @@ function persianToGregorian(persianDate) {
   return new Date(gy, gm - 1, gd);
 }
 
+// ===== اعتبارسنجی تاریخ شمسی =====
+function isValidPersianDate(str) {
+  if (!/^\d{4}\/\d{2}\/\d{2}$/.test(str)) return false;
+  const parts = str.split('/');
+  const y = parseInt(parts[0]);
+  const m = parseInt(parts[1]);
+  const d = parseInt(parts[2]);
+  if (y < 1300 || y > 1500) return false;
+  if (m < 1 || m > 12) return false;
+  if (d < 1 || d > 31) return false;
+  return true;
+}
+
 // ===== بارگذاری داده‌ها =====
 async function loadData() {
   try {
@@ -681,7 +685,6 @@ function getLiveTasks() {
 // ===== رندر =====
 function render() {
   const grid = document.getElementById('booksGrid');
-  const liveTasks = getLiveTasks();
 
   if (data.books.length === 0) {
     grid.innerHTML = '<div class="empty-msg">📚 هنوز کتابی ثبت نشده است</div>';
@@ -801,7 +804,6 @@ function tryLogin() {
     lockMultiplier = 1;
     document.getElementById('loginBox').classList.add('hidden');
     document.getElementById('adminPanel').classList.remove('hidden');
-    initDatePicker();
     renderAdmin();
   } else {
     loginAttempts++;
@@ -814,23 +816,6 @@ function tryLogin() {
       updateLoginBtn();
     }
   }
-}
-
-// ===== تقویم شمسی =====
-function initDatePicker() {
-  if ($('#taskDate').data('datepicker')) return;
-  $('#taskDate').persianDatepicker({
-    format: 'YYYY/MM/DD',
-    initialValue: false,
-    autoClose: true,
-    persianDigit: false,
-    observer: true,
-    calendar: {
-      persian: {
-        locale: 'fa'
-      }
-    }
-  });
 }
 
 // ===== رندر پنل ادمین =====
@@ -905,11 +890,15 @@ function deleteBook(id) {
 
 function addTask() {
   const bookId = document.getElementById('taskBookSelect').value;
-  const date = document.getElementById('taskDate').value;
+  const date = document.getElementById('taskDate').value.trim();
   const desc = document.getElementById('taskDesc').value.trim();
 
   if (!bookId) { alert('کتاب را انتخاب کنید'); return; }
-  if (!date) { alert('تاریخ تحویل را انتخاب کنید'); return; }
+  if (!date) { alert('تاریخ تحویل را وارد کنید'); return; }
+  if (!isValidPersianDate(date)) {
+    alert('فرمت تاریخ اشتباه است. لطفاً به صورت 1405/07/05 وارد کنید.');
+    return;
+  }
 
   const task = {
     id: 't' + Date.now(),
@@ -948,4 +937,4 @@ loadData();
 setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
 </script>
 </body>
-  </html>
+        </html>
