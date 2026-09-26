@@ -322,6 +322,22 @@ header {
   line-height:1.6;
 }
 
+.back-login-btn {
+  width:100%;
+  padding:12px;
+  background: rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:12px;
+  color:#fff;
+  font-family:inherit;
+  font-size:0.9rem;
+  cursor:pointer;
+  margin-top:10px;
+  transition: all 0.2s;
+}
+
+.back-login-btn:hover { background: rgba(255,255,255,0.15); }
+
 .login-btn, .admin-btn {
   width:100%;
   padding:13px;
@@ -530,6 +546,7 @@ header {
     <button class="login-btn" id="loginBtn" onclick="tryLogin()">ورود</button>
     <div class="error-msg" id="loginError"></div>
     <div class="login-hint">فقط ورود افراد مدیریتی گروه دهم، به این بخش مجاز می‌باشد</div>
+    <button class="back-login-btn" onclick="closeAdmin()">← بازگشت</button>
   </div>
 
   <div class="admin-panel hidden" id="adminPanel">
@@ -937,4 +954,4 @@ loadData();
 setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
 </script>
 </body>
-  </html>
+</html>
