@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>گروه دهم | سایت ثبت تکالیف درسی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn', sans-serif; }
+
+body {
+  min-height:100vh;
+  background: linear-gradient(135deg, #0a3d2e 0%, #1a5c3a 40%, #2d7a4f 70%, #c9a227 100%);
+  background-attachment: fixed;
+  color:#fff;
+  padding: 20px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(201,162,39,0.15), transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(45,122,79,0.2), transparent 50%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ===== هدر ===== */
+header {
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  padding: 20px 0 30px;
+}
+
+.logo-box {
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.logo-box svg { width:80px; height:80px; filter: drop-shadow(0 4px 15px rgba(201,162,39,0.5)); }
+
+.logo-text h1 {
+  font-size: 2.2rem;
+  font-weight:900;
+  background: linear-gradient(90deg, #fff, #c9a227, #fff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  letter-spacing:1px;
+}
+
+.logo-text p {
+  font-size:0.85rem;
+  color: rgba(255,255,255,0.6);
+  margin-top:5px;
+  letter-spacing:2px;
+}
+
+/* ===== همبرگری ===== */
+.menu-btn {
+  position:fixed;
+  top:20px;
+  left:20px;
+  z-index:100;
+  width:44px;
+  height:44px;
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:12px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  opacity:0.45;
+  transition: all 0.3s;
+}
+
+.menu-btn:hover { opacity:1; background: rgba(255,255,255,0.15); }
+.menu-btn span {
+  width:22px; height:2px; background:#fff; border-radius:2px;
+}
+
+.menu-dropdown {
+  position:fixed;
+  top:75px; left:20px;
+  z-index:100;
+  background: rgba(10,40,30,0.95);
+  backdrop-filter: blur(20px);
+  border:1px solid rgba(201,162,39,0.3);
+  border-radius:14px;
+  padding:8px;
+  display:none;
+  min-width:200px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.menu-dropdown.show { display:block; }
+
+.menu-dropdown button {
+  width:100%;
+  background:transparent;
+  border:none;
+  color:#fff;
+  padding:12px 16px;
+  text-align:right;
+  font-family:inherit;
+  font-size:0.95rem;
+  border-radius:8px;
+  cursor:pointer;
+  transition:background 0.2s;
+}
+
+.menu-dropdown button:hover { background: rgba(201,162,39,0.2); }
+
+/* ===== کارت‌های کتاب ===== */
+.books-grid {
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap:22px;
+  max-width:1200px;
+  margin:0 auto;
+  padding: 20px 10px 60px;
+}
+
+.book-card {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:20px;
+  padding:24px 22px;
+  cursor:pointer;
+  transition: all 0.3s;
+  position:relative;
+  overflow:hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  min-height:140px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.book-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(201,162,39,0.5);
+  box-shadow: 0 12px 40px rgba(201,162,39,0.25);
+}
+
+.book-card::before {
+  content:'';
+  position:absolute;
+  top:-50%; right:-50%;
+  width:100%; height:100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+  pointer-events:none;
+}
+
+.book-title {
+  font-size:1.15rem;
+  font-weight:700;
+  color:#fff;
+  line-height:1.6;
+}
+
+.badges {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:15px;
+}
+
+.badge {
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:0.75rem;
+  font-weight:500;
+  backdrop-filter: blur(6px);
+  border:1px solid rgba(255,255,255,0.3);
+}
+
+.badge.white  { background: rgba(255,255,255,0.85); color:#333; }
+.badge.green  { background: rgba(46,204,113,0.75); color:#fff; }
+.badge.yellow { background: rgba(241,196,15,0.8); color:#333; }
+.badge.orange { background: rgba(230,126,34,0.8); color:#fff; }
+.badge.red    { background: rgba(231,76,60,0.8); color:#fff; }
+
+.empty-msg {
+  grid-column: 1/-1;
+  text-align:center;
+  color:rgba(255,255,255,0.5);
+  padding:60px 20px;
+  font-size:1.1rem;
+}
+
+/* ===== صفحه جزئیات ===== */
+.detail-page {
+  position:relative;
+  z-index:2;
+  max-width:900px;
+  margin:0 auto;
+  padding: 10px;
+  display:none;
+}
+
+.back-btn {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;
+  padding:10px 20px;
+  border-radius:12px;
+  font-family:inherit;
+  cursor:pointer;
+  margin-bottom:20px;
+  font-size:0.9rem;
+  transition: all 0.2s;
+}
+
+.back-btn:hover { background: rgba(255,255,255,0.2); }
+
+.detail-header {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:20px;
+  padding:25px;
+  margin-bottom:20px;
+}
+
+.detail-header h2 { font-size:1.5rem; color:#fff; margin-bottom:12px; }
+
+.task-list { display:flex; flex-direction:column; gap:14px; }
+
+.task-item {
+  background: rgba(255,255,255,0.07);
+  backdrop-filter: blur(15px);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:16px;
+  padding:18px 20px;
+  transition: all 0.2s;
+}
+
+.task-item:hover { background: rgba(255,255,255,0.12); }
+
+.task-date {
+  font-size:0.8rem;
+  color:#c9a227;
+  font-weight:500;
+  margin-bottom:8px;
+}
+
+.task-desc { font-size:0.95rem; color:rgba(255,255,255,0.9); line-height:1.8; }
+
+/* ===== پنل ادمین ===== */
+.admin-overlay {
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  overflow-y:auto;
+}
+
+.admin-overlay.show { display:flex; }
+
+.login-box, .admin-panel {
+  background: rgba(10,40,30,0.97);
+  border:1px solid rgba(201,162,39,0.4);
+  border-radius:20px;
+  padding:30px;
+  width:100%;
+  max-width:500px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.login-box h3, .admin-panel h3 {
+  text-align:center;
+  margin-bottom:20px;
+  color:#c9a227;
+  font-size:1.3rem;
+}
+
+.login-box input {
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color:#fff;
+  font-family:inherit;
+  font-size:1rem;
+  text-align:center;
+  letter-spacing:2px;
+  margin-bottom:12px;
+}
+
+.login-box input:focus { outline:none; border-color:#c9a227; }
+
+.login-hint {
+  font-size:0.7rem;
+  color:rgba(255,255,255,0.35);
+  text-align:center;
+  margin-top:10px;
+  line-height:1.6;
+}
+
+.login-btn, .admin-btn {
+  width:100%;
+  padding:13px;
+  background: linear-gradient(135deg, #2d7a4f, #c9a227);
+  border:none;
+  border-radius:12px;
+  color:#fff;
+  font-family:inherit;
+  font-size:0.95rem;
+  font-weight:600;
+  cursor:pointer;
+  transition: all 0.2s;
+}
+
+.login-btn:hover, .admin-btn:hover { opacity:0.9; transform:translateY(-1px); }
+
+.login-btn:disabled { opacity:0.4; cursor:not-allowed; }
+
+.error-msg {
+  color:#e74c3c;
+  text-align:center;
+  font-size:0.85rem;
+  margin-top:10px;
+  min-height:20px;
+}
+
+/* پنل ادمین - تمام صفحه */
+.admin-panel {
+  max-width:1100px;
+  max-height:90vh;
+  overflow-y:auto;
+}
+
+.admin-section {
+  background: rgba(255,255,255,0.05);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:16px;
+}
+
+.admin-section h4 {
+  color:#c9a227;
+  margin-bottom:14px;
+  font-size:1rem;
+}
+
+.admin-input, .admin-textarea, .admin-select {
+  width:100%;
+  padding:11px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  color:#fff;
+  font-family:inherit;
+  font-size:0.9rem;
+  margin-bottom:10px;
+}
+
+.admin-input:focus, .admin-textarea:focus, .admin-select:focus {
+  outline:none; border-color:#c9a227;
+}
+
+.admin-textarea { min-height:90px; resize:vertical; }
+
+.admin-select option { background:#0a3d2e; }
+
+.color-chips {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.color-chip {
+  padding:8px 16px;
+  border-radius:20px;
+  font-size:0.8rem;
+  cursor:pointer;
+  border:2px solid transparent;
+  transition: all 0.2s;
+  opacity:0.55;
+}
+
+.color-chip.active { opacity:1; border-color:#fff; transform:scale(1.05); }
+
+.color-chip.white  { background:#fff; color:#333; }
+.color-chip.green  { background:#2ecc71; color:#fff; }
+.color-chip.yellow { background:#f1c40f; color:#333; }
+.color-chip.orange { background:#e67e22; color:#fff; }
+.color-chip.red    { background:#e74c3c; color:#fff; }
+
+.item-row {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:10px;
+  background: rgba(255,255,255,0.05);
+  border-radius:10px;
+  margin-bottom:8px;
+}
+
+.item-row span { flex:1; font-size:0.9rem; }
+
+.delete-btn {
+  background: rgba(231,76,60,0.3);
+  border:1px solid rgba(231,76,60,0.5);
+  color:#fff;
+  padding:6px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  font-family:inherit;
+  font-size:0.8rem;
+}
+
+.delete-btn:hover { background: rgba(231,76,60,0.5); }
+
+.json-output {
+  width:100%;
+  min-height:150px;
+  background: rgba(0,0,0,0.4);
+  border:1px solid rgba(201,162,39,0.3);
+  border-radius:10px;
+  padding:12px;
+  color:#c9a227;
+  font-family:monospace;
+  font-size:0.75rem;
+  direction:ltr;
+  text-align:left;
+  margin-top:10px;
+}
+
+.close-admin {
+  background: rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;
+  padding:10px 20px;
+  border-radius:10px;
+  cursor:pointer;
+  font-family:inherit;
+  margin-top:10px;
+  width:100%;
+}
+
+.hidden { display:none !important; }
+</style>
+</head>
+<body>
+
+<!-- دکمه همبرگری -->
+<div class="menu-btn" onclick="toggleMenu()">
+  <span></span><span></span><span></span>
+</div>
+
+<div class="menu-dropdown" id="menuDropdown">
+  <button onclick="openAdminLogin()">🔐 ورود به پنل ادمین</button>
+</div>
+
+<!-- هدر -->
+<header>
+  <div class="logo-box">
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bookGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#c9a227"/>
+          <stop offset="100%" style="stop-color:#2d7a4f"/>
+        </linearGradient>
+      </defs>
+      <circle cx="50" cy="50" r="46" fill="none" stroke="url(#bookGrad)" stroke-width="2.5"/>
+      <circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/>
+      <!-- کتاب -->
+      <path d="M30 38 Q50 32 50 38 L50 68 Q50 62 30 68 Z" fill="url(#bookGrad)" opacity="0.9"/>
+      <path d="M70 38 Q50 32 50 38 L50 68 Q50 62 70 68 Z" fill="url(#bookGrad)" opacity="0.7"/>
+      <line x1="50" y1="38" x2="50" y2="68" stroke="#fff" stroke-width="1.5" opacity="0.6"/>
+      <!-- نور -->
+      <circle cx="50" cy="28" r="4" fill="#c9a227" opacity="0.9"/>
+      <line x1="50" y1="20" x2="50" y2="15" stroke="#c9a227" stroke-width="2" stroke-linecap="round"/>
+      <line x1="42" y1="23" x2="38" y2="19" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="58" y1="23" x2="62" y2="19" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="36" y1="28" x2="32" y2="28" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="64" y1="28" x2="68" y2="28" stroke="#c9a227" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <div class="logo-text">
+      <h1>گروه دهم</h1>
+      <p>سایت ثبت تکالیف درسی</p>
+    </div>
+  </div>
+</header>
+
+<!-- گرید کتاب‌ها -->
+<div class="books-grid" id="booksGrid"></div>
+
+<!-- صفحه جزئیات -->
+<div class="detail-page" id="detailPage">
+  <button class="back-btn" onclick="goBack()">→ بازگشت</button>
+  <div class="detail-header">
+    <h2 id="detailTitle"></h2>
+    <div class="badges" id="detailBadges"></div>
+  </div>
+  <div class="task-list" id="taskList"></div>
+</div>
+
+<!-- اورلی ادمین -->
+<div class="admin-overlay" id="adminOverlay">
+
+  <!-- ورود -->
+  <div class="login-box" id="loginBox">
+    <h3>🔐 ورود مدیریت</h3>
+    <input type="password" id="passInput" placeholder="رمز عبور" onkeydown="if(event.key==='Enter')tryLogin()">
+    <button class="login-btn" id="loginBtn" onclick="tryLogin()">ورود</button>
+    <div class="error-msg" id="loginError"></div>
+    <div class="login-hint">فقط ورود افراد مدیریتی گروه دهم، به این بخش مجاز می‌باشد</div>
+  </div>
+
+  <!-- پنل -->
+  <div class="admin-panel hidden" id="adminPanel">
+    <h3>⚙️ پنل مدیریت</h3>
+
+    <div class="admin-section">
+      <h4>📚 افزودن کتاب جدید</h4>
+      <input class="admin-input" id="newBookName" placeholder="نام کتاب">
+      <div class="color-chips" id="newBookColors">
+        <div class="color-chip white" data-color="white" onclick="toggleNewColor(this)">نامعلوم</div>
+        <div class="color-chip green" data-color="green" onclick="toggleNewColor(this)">تدریس</div>
+        <div class="color-chip yellow" data-color="yellow" onclick="toggleNewColor(this)">امکان پرسش</div>
+        <div class="color-chip orange" data-color="orange" onclick="toggleNewColor(this)">پرسش</div>
+        <div class="color-chip red" data-color="red" onclick="toggleNewColor(this)">آزمون</div>
+      </div>
+      <button class="admin-btn" onclick="addBook()">➕ افزودن کتاب</button>
+    </div>
+
+    <div class="admin-section">
+      <h4>📖 کتاب‌های موجود</h4>
+      <div id="booksAdminList"></div>
+    </div>
+
+    <div class="admin-section">
+      <h4>📝 افزودن تکلیف</h4>
+      <select class="admin-select" id="taskBookSelect"></select>
+      <input class="admin-input" type="date" id="taskDate">
+      <textarea class="admin-textarea" id="taskDesc" placeholder="توضیحات (اختیاری)"></textarea>
+      <button class="admin-btn" onclick="addTask()">➕ افزودن تکلیف</button>
+    </div>
+
+    <div class="admin-section">
+      <h4>📋 تکالیف موجود</h4>
+      <div id="tasksAdminList"></div>
+    </div>
+
+    <div class="admin-section">
+      <h4>💾 خروجی data.json</h4>
+      <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-bottom:10px;">
+        این محتوا را کپی کنید و در فایل data.json در گیت‌هاب جای‌گذاری کنید:
+      </p>
+      <textarea class="json-output" id="jsonOutput" readonly></textarea>
+      <button class="admin-btn" onclick="copyJson()" style="margin-top:10px;">📋 کپی</button>
+    </div>
+
+    <button class="close-admin" onclick="closeAdmin()">بستن پنل</button>
+  </div>
+</div>
+
+<script>
+// ===== داده‌ها =====
+let data = { books: [], tasks: [] };
+let selectedBookId = null;
+let newBookColors = [];
+let loginAttempts = 0;
+let lockUntil = 0;
+let lockMultiplier = 1;
+const ADMIN_PASSWORD = "0992049390952623571";
+
+// ===== بارگذاری داده‌ها =====
+async function loadData() {
+  try {
+    const res = await fetch('data.json?t=' + Date.now());
+    if (res.ok) {
+      data = await res.json();
+      if (!data.books) data.books = [];
+      if (!data.tasks) data.tasks = [];
+    }
+  } catch(e) {
+    console.log('data.json یافت نشد، از داده خالی استفاده می‌شود');
+  }
+  render();
+}
+
+// ===== فیلتر تکالیف زنده =====
+function getLiveTasks() {
+  const now = new Date();
+  return data.tasks.filter(t => {
+    if (!t.date) return false;
+    const taskDate = new Date(t.date + 'T23:59:59');
+    const diffHours = (now - taskDate) / (1000 * 60 * 60);
+    return diffHours < 10;
+  });
+}
+
+// ===== رندر =====
+function render() {
+  const grid = document.getElementById('booksGrid');
+  const liveTasks = getLiveTasks();
+
+  if (data.books.length === 0) {
+    grid.innerHTML = '<div class="empty-msg">📚 هنوز کتابی ثبت نشده است</div>';
+    return;
+  }
+
+  grid.innerHTML = data.books.map(book => {
+    const bookTasks = liveTasks.filter(t => t.bookId === book.id);
+    const badgesHtml = (book.colors || []).map(c => {
+      const labels = { white:'نامعلوم', green:'تدریس', yellow:'امکان پرسش', orange:'پرسش', red:'آزمون' };
+      const customLabels = book.customLabels || {};
+      return `<span class="badge ${c}">${customLabels[c] || labels[c]}</span>`;
+    }).join('');
+
+    return `
+      <div class="book-card" onclick="openBook('${book.id}')">
+        <div class="book-title">تکالیف کتاب ${book.name}</div>
+        <div class="badges">${badgesHtml}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// ===== باز کردن کتاب =====
+function openBook(bookId) {
+  selectedBookId = bookId;
+  const book = data.books.find(b => b.id === bookId);
+  if (!book) return;
+
+  const liveTasks = getLiveTasks().filter(t => t.bookId === bookId)
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  document.getElementById('detailTitle').textContent = `تکالیف کتاب ${book.name}`;
+
+  const labels = { white:'نامعلوم', green:'تدریس', yellow:'امکان پرسش', orange:'پرسش', red:'آزمون' };
+  const customLabels = book.customLabels || {};
+  document.getElementById('detailBadges').innerHTML = (book.colors || []).map(c =>
+    `<span class="badge ${c}">${customLabels[c] || labels[c]}</span>`
+  ).join('');
+
+  const taskList = document.getElementById('taskList');
+  if (liveTasks.length === 0) {
+    taskList.innerHTML = '<div class="empty-msg">📝 تکلیفی ثبت نشده است</div>';
+  } else {
+    taskList.innerHTML = liveTasks.map(t => `
+      <div class="task-item">
+        <div class="task-date">📅 تاریخ تحویل: ${formatDate(t.date)}</div>
+        ${t.desc ? `<div class="task-desc">${escapeHtml(t.desc)}</div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  document.getElementById('booksGrid').style.display = 'none';
+  document.querySelector('header').style.display = 'none';
+  document.getElementById('detailPage').style.display = 'block';
+}
+
+function goBack() {
+  selectedBookId = null;
+  document.getElementById('booksGrid').style.display = 'grid';
+  document.querySelector('header').style.display = 'flex';
+  document.getElementById('detailPage').style.display = 'none';
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}/${m}/${day}`;
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+// ===== منو =====
+function toggleMenu() {
+  document.getElementById('menuDropdown').classList.toggle('show');
+}
+
+document.addEventListener('click', e => {
+  const menu = document.getElementById('menuDropdown');
+  const btn = document.querySelector('.menu-btn');
+  if (!menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('show');
+  }
+});
+
+// ===== ادمین =====
+function openAdminLogin() {
+  document.getElementById('menuDropdown').classList.remove('show');
+  document.getElementById('adminOverlay').classList.add('show');
+  document.getElementById('loginBox').classList.remove('hidden');
+  document.getElementById('adminPanel').classList.add('hidden');
+  document.getElementById('passInput').value = '';
+  document.getElementById('loginError').textContent = '';
+  updateLoginBtn();
+}
+
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('show');
+}
+
+function updateLoginBtn() {
+  const btn = document.getElementById('loginBtn');
+  const now = Date.now();
+  if (now < lockUntil) {
+    btn.disabled = true;
+    const remain = Math.ceil((lockUntil - now) / 1000);
+    btn.textContent = `قفل: ${remain} ثانیه`;
+    setTimeout(updateLoginBtn, 1000);
+  } else {
+    btn.disabled = false;
+    btn.textContent = 'ورود';
+  }
+}
+
+function tryLogin() {
+  const now = Date.now();
+  if (now < lockUntil) return;
+
+  const pass = document.getElementById('passInput').value;
+  if (pass === ADMIN_PASSWORD) {
+    loginAttempts = 0;
+    lockMultiplier = 1;
+    document.getElementById('loginBox').classList.add('hidden');
+    document.getElementById('adminPanel').classList.remove('hidden');
+    renderAdmin();
+  } else {
+    loginAttempts++;
+    document.getElementById('loginError').textContent = 'رمز عبور اشتباه است';
+    if (loginAttempts >= 2) {
+      const lockSec = 60 * lockMultiplier;
+      lockUntil = Date.now() + lockSec * 1000;
+      loginAttempts = 0;
+      lockMultiplier++;
+      updateLoginBtn();
+    }
+  }
+}
+
+// ===== رندر پنل ادمین =====
+function renderAdmin() {
+  const booksList = document.getElementById('booksAdminList');
+  booksList.innerHTML = data.books.map(b => `
+    <div class="item-row">
+      <span>📚 ${b.name}</span>
+      <button class="delete-btn" onclick="deleteBook('${b.id}')">حذف</button>
+    </div>
+  `).join('') || '<p style="color:rgba(255,255,255,0.4); font-size:0.85rem;">کتابی موجود نیست</p>';
+
+  const select = document.getElementById('taskBookSelect');
+  select.innerHTML = '<option value="">-- انتخاب کتاب --</option>' +
+    data.books.map(b => `<option value="${b.id}">${b.name}</option>`).join('');
+
+  const tasksList = document.getElementById('tasksAdminList');
+  const liveTasks = getLiveTasks();
+  tasksList.innerHTML = liveTasks.map(t => {
+    const book = data.books.find(b => b.id === t.bookId);
+    return `
+      <div class="item-row">
+        <span>📝 ${book ? book.name : '?'} — ${formatDate(t.date)}${t.desc ? ' — ' + t.desc.substring(0,30) : ''}</span>
+        <button class="delete-btn" onclick="deleteTask('${t.id}')">حذف</button>
+      </div>
+    `;
+  }).join('') || '<p style="color:rgba(255,255,255,0.4); font-size:0.85rem;">تکلیفی موجود نیست</p>';
+
+  updateJsonOutput();
+}
+
+function toggleNewColor(el) {
+  const color = el.dataset.color;
+  if (newBookColors.includes(color)) {
+    newBookColors = newBookColors.filter(c => c !== color);
+    el.classList.remove('active');
+  } else {
+    newBookColors.push(color);
+    el.classList.add('active');
+  }
+}
+
+function addBook() {
+  const name = document.getElementById('newBookName').value.trim();
+  if (!name) { alert('نام کتاب را وارد کنید'); return; }
+
+  const book = {
+    id: 'b' + Date.now(),
+    name: name,
+    colors: [...newBookColors],
+    customLabels: {}
+  };
+  data.books.push(book);
+
+  document.getElementById('newBookName').value = '';
+  newBookColors = [];
+  document.querySelectorAll('#newBookColors .color-chip').forEach(c => c.classList.remove('active'));
+
+  renderAdmin();
+  render();
+}
+
+function deleteBook(id) {
+  if (!confirm('این کتاب و همه تکالیفش حذف شود؟')) return;
+  data.books = data.books.filter(b => b.id !== id);
+  data.tasks = data.tasks.filter(t => t.bookId !== id);
+  renderAdmin();
+  render();
+}
+
+function addTask() {
+  const bookId = document.getElementById('taskBookSelect').value;
+  const date = document.getElementById('taskDate').value;
+  const desc = document.getElementById('taskDesc').value.trim();
+
+  if (!bookId) { alert('کتاب را انتخاب کنید'); return; }
+  if (!date) { alert('تاریخ تحویل را وارد کنید'); return; }
+
+  const task = {
+    id: 't' + Date.now(),
+    bookId: bookId,
+    date: date,
+    desc: desc
+  };
+  data.tasks.push(task);
+
+  document.getElementById('taskDate').value = '';
+  document.getElementById('taskDesc').value = '';
+
+  renderAdmin();
+  render();
+}
+
+function deleteTask(id) {
+  data.tasks = data.tasks.filter(t => t.id !== id);
+  renderAdmin();
+  render();
+}
+
+function updateJsonOutput() {
+  document.getElementById('jsonOutput').value = JSON.stringify(data, null, 2);
+}
+
+function copyJson() {
+  const el = document.getElementById('jsonOutput');
+  el.select();
+  document.execCommand('copy');
+  alert('کپی شد! حالا در فایل data.json گیت‌هاب جای‌گذاری کنید.');
+}
+
+// ===== شروع =====
+loadData();
+setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
+</script>
+</body>
+  </html>
