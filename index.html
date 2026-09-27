@@ -606,55 +606,6 @@ let lockUntil = 0;
 let lockMultiplier = 1;
 const ADMIN_PASSWORD = "0992049390952623571";
 
-// ===== تبدیل شمسی به میلادی =====
-function persianToGregorian(persianDate) {
-  const parts = persianDate.split('/');
-  const py = parseInt(parts[0]);
-  const pm = parseInt(parts[1]);
-  const pd = parseInt(parts[2]);
-  
-  let gy, gm, gd;
-  const r = py - 979;
-  const g_day_no = 365 * r + Math.floor(r / 33) * 8 + Math.floor(((r % 33) + 3) / 4);
-  let j_day_no = 0;
-  const j_month_days = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
-  for (let i = 0; i < pm - 1; i++) j_day_no += j_month_days[i];
-  j_day_no += pd - 1;
-  const total_days = g_day_no + 79 + j_day_no;
-  
-  gy = 1600 + 400 * Math.floor(total_days / 146097);
-  let rem = total_days % 146097;
-  let leap = true;
-  if (rem >= 36525) {
-    rem--;
-    gy += 100 * Math.floor(rem / 36524);
-    rem = rem % 36524;
-    if (rem >= 365) rem++;
-    else leap = false;
-  }
-  gy += 4 * Math.floor(rem / 1461);
-  rem %= 1461;
-  if (rem >= 366) {
-    leap = false;
-    rem--;
-    gy += Math.floor(rem / 365);
-    rem %= 365;
-  }
-  
-  const g_month_days = [0, 31, leap ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  gm = 0;
-  for (let i = 1; i <= 12; i++) {
-    if (rem < g_month_days[i]) {
-      gm = i;
-      break;
-    }
-    rem -= g_month_days[i];
-  }
-  gd = rem + 1;
-  
-  return new Date(gy, gm - 1, gd);
-}
-
 // ===== اعتبارسنجی تاریخ شمسی =====
 function isValidPersianDate(str) {
   if (!/^\d{4}\/\d{2}\/\d{2}$/.test(str)) return false;
@@ -683,20 +634,9 @@ async function loadData() {
   render();
 }
 
-// ===== فیلتر تکالیف زنده (۱۰ ساعت) =====
+// ===== برگرداندن همه تکالیف (بدون فیلتر زمانی) =====
 function getLiveTasks() {
-  const now = new Date();
-  return data.tasks.filter(t => {
-    if (!t.date) return false;
-    try {
-      const greg = persianToGregorian(t.date);
-      greg.setHours(23, 59, 59);
-      const diffHours = (now - greg) / (1000 * 60 * 60);
-      return diffHours < 10;
-    } catch(e) {
-      return false;
-    }
-  });
+  return data.tasks;
 }
 
 // ===== رندر =====
@@ -730,7 +670,7 @@ function openBook(bookId) {
   const book = data.books.find(b => b.id === bookId);
   if (!book) return;
 
-  const liveTasks = getLiveTasks().filter(t => t.bookId === bookId)
+  const bookTasks = data.tasks.filter(t => t.bookId === bookId)
     .sort((a,b) => a.date.localeCompare(b.date));
 
   document.getElementById('detailTitle').textContent = `تکالیف کتاب ${book.name}`;
@@ -742,10 +682,10 @@ function openBook(bookId) {
   ).join('');
 
   const taskList = document.getElementById('taskList');
-  if (liveTasks.length === 0) {
+  if (bookTasks.length === 0) {
     taskList.innerHTML = '<div class="empty-msg">📝 تکلیفی ثبت نشده است</div>';
   } else {
-    taskList.innerHTML = liveTasks.map(t => `
+    taskList.innerHTML = bookTasks.map(t => `
       <div class="task-item">
         <div class="task-date">📅 تاریخ تحویل: ${t.date}</div>
         ${t.desc ? `<div class="task-desc">${escapeHtml(t.desc)}</div>` : ''}
@@ -852,8 +792,7 @@ function renderAdmin() {
   if (currentVal) select.value = currentVal;
 
   const tasksList = document.getElementById('tasksAdminList');
-  const liveTasks = getLiveTasks();
-  tasksList.innerHTML = liveTasks.map(t => {
+  tasksList.innerHTML = data.tasks.map(t => {
     const book = data.books.find(b => b.id === t.bookId);
     return `
       <div class="item-row">
@@ -954,4 +893,4 @@ loadData();
 setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
 </script>
 </body>
-</html>
+  </html>
