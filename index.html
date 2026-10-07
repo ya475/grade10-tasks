@@ -604,11 +604,11 @@ header {
       <h4>📚 افزودن کتاب جدید</h4>
       <input class="admin-input" id="newBookName" placeholder="نام کتاب">
       <div class="color-chips" id="newBookColors">
-        <div class="color-chip white" data-color="white" onclick="toggleNewColor(this)">نامعلوم</div>
-        <div class="color-chip green" data-color="green" onclick="toggleNewColor(this)">تدریس</div>
-        <div class="color-chip yellow" data-color="yellow" onclick="toggleNewColor(this)">امکان پرسش</div>
-        <div class="color-chip orange" data-color="orange" onclick="toggleNewColor(this)">پرسش</div>
-        <div class="color-chip red" data-color="red" onclick="toggleNewColor(this)">آزمون</div>
+        <div class="color-chip white" data-color="white" onclick="toggleNewColor(this)">نامـعـلـوم</div>
+        <div class="color-chip green" data-color="green" onclick="toggleNewColor(this)">تـدریـس</div>
+        <div class="color-chip yellow" data-color="yellow" onclick="toggleNewColor(this)">امـکان پرسـش</div>
+        <div class="color-chip orange" data-color="orange" onclick="toggleNewColor(this)">پرسـش</div>
+        <div class="color-chip red" data-color="red" onclick="toggleNewColor(this)">آزمــون</div>
       </div>
       <button class="admin-btn" onclick="addBook()">➕ افزودن کتاب</button>
     </div>
@@ -716,7 +716,7 @@ function render() {
 
   grid.innerHTML = data.books.map(book => {
     const badgesHtml = (book.colors || []).map(c => {
-      const labels = { white:'نامعلوم', green:'تدریس', yellow:'امکان پرسش', orange:'پرسش', red:'آزمون' };
+      const labels = { white:'نامـعـلـوم', green:'تـدریـس', yellow:'امـکان پرسـش', orange:'پرسـش', red:'آزمــون' };
       const customLabels = book.customLabels || {};
       return `<span class="badge ${c}">${customLabels[c] || labels[c]}</span>`;
     }).join('');
@@ -741,7 +741,7 @@ function openBook(bookId) {
 
   document.getElementById('detailTitle').textContent = `تکالیف کتاب ${book.name}`;
 
-  const labels = { white:'نامعلوم', green:'تدریس', yellow:'امکان پرسش', orange:'پرسش', red:'آزمون' };
+  const labels = { white:'نامـعـلـوم', green:'تـدریـس', yellow:'امـکان پرسـش', orange:'پرسش', red:'آزمــون' };
   const customLabels = book.customLabels || {};
   document.getElementById('detailBadges').innerHTML = (book.colors || []).map(c =>
     `<span class="badge ${c}">${customLabels[c] || labels[c]}</span>`
