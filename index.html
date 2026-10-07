@@ -30,6 +30,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Ordibehesht';
+  src: url('Ordibehesht.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * { margin:0; padding:0; box-sizing:border-box; font-family:'B Mitra', 'Vazirmatn', sans-serif; }
 
 body {
@@ -211,12 +219,14 @@ header {
 }
 
 .badge {
-  padding:5px 12px;
+  font-family: 'Ordibehesht', 'Vazirmatn', sans-serif;
+  padding:5px 14px;
   border-radius:20px;
-  font-size:0.75rem;
-  font-weight:500;
+  font-size:0.85rem;
+  font-weight:400;
   backdrop-filter: blur(6px);
   border:1px solid rgba(255,255,255,0.3);
+  letter-spacing:0.5px;
 }
 
 .badge.white  { background: rgba(255,255,255,0.85); color:#333; }
@@ -449,9 +459,10 @@ header {
 }
 
 .color-chip {
-  padding:8px 16px;
+  font-family: 'Ordibehesht', 'Vazirmatn', sans-serif;
+  padding:8px 18px;
   border-radius:20px;
-  font-size:0.8rem;
+  font-size:0.9rem;
   cursor:pointer;
   border:2px solid transparent;
   transition: all 0.2s;
@@ -661,7 +672,7 @@ function englishToPersianDigits(str) {
   return String(str).replace(/\d/g, d => persianDigits[d]);
 }
 
-// ===== اعتبارسنجی تاریخ شمسی (پشتیبانی از اعداد فارسی و انگلیسی) =====
+// ===== اعتبارسنجی تاریخ شمسی =====
 function isValidPersianDate(str) {
   const normalized = persianToEnglishDigits(str);
   if (!/^\d{4}\/\d{2}\/\d{2}$/.test(normalized)) return false;
@@ -690,7 +701,6 @@ async function loadData() {
   render();
 }
 
-// ===== برگرداندن همه تکالیف =====
 function getLiveTasks() {
   return data.tasks;
 }
@@ -905,7 +915,6 @@ function addTask() {
   let date = document.getElementById('taskDate').value.trim();
   const desc = document.getElementById('taskDesc').value.trim();
 
-  // تبدیل اعداد فارسی/عربی به انگلیسی برای ذخیره
   date = persianToEnglishDigits(date);
 
   if (!bookId) { alert('کتاب را انتخاب کنید'); return; }
@@ -952,4 +961,4 @@ loadData();
 setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
 </script>
 </body>
-  </html>
+        </html>
