@@ -6,7 +6,31 @@
 <title>گروه دهم | سایت مشاهده تکالیف درسی</title>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Vazirmatn', sans-serif; }
+@font-face {
+  font-family: 'B Titr';
+  src: url('B Titr Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'B Mitra';
+  src: url('B Mitra_0.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'B Mitra';
+  src: url('B Mitra Bold_0.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'B Mitra', 'Vazirmatn', sans-serif; }
 
 body {
   min-height:100vh;
@@ -49,6 +73,7 @@ header {
 .logo-box svg { width:80px; height:80px; filter: drop-shadow(0 4px 15px rgba(201,162,39,0.5)); }
 
 .logo-text h1 {
+  font-family: 'B Titr', 'Vazirmatn', sans-serif;
   font-size: 2.2rem;
   font-weight:900;
   background: linear-gradient(90deg, #fff, #c9a227, #fff);
@@ -59,6 +84,7 @@ header {
 }
 
 .logo-text p {
+  font-family: 'B Titr', 'Vazirmatn', sans-serif;
   font-size:0.85rem;
   color: rgba(255,255,255,0.6);
   margin-top:5px;
@@ -170,8 +196,9 @@ header {
 }
 
 .book-title {
+  font-family: 'B Mitra', 'Vazirmatn', sans-serif;
+  font-weight: bold;
   font-size:1.15rem;
-  font-weight:700;
   color:#fff;
   line-height:1.6;
 }
@@ -241,7 +268,13 @@ header {
   margin-bottom:20px;
 }
 
-.detail-header h2 { font-size:1.5rem; color:#fff; margin-bottom:12px; }
+.detail-header h2 {
+  font-family: 'B Mitra', 'Vazirmatn', sans-serif;
+  font-weight: bold;
+  font-size:1.5rem;
+  color:#fff;
+  margin-bottom:12px;
+}
 
 .task-list { display:flex; flex-direction:column; gap:14px; }
 
@@ -292,6 +325,8 @@ header {
 }
 
 .login-box h3, .admin-panel h3 {
+  font-family: 'B Mitra', 'Vazirmatn', sans-serif;
+  font-weight: bold;
   text-align:center;
   margin-bottom:20px;
   color:#c9a227;
@@ -379,6 +414,8 @@ header {
 }
 
 .admin-section h4 {
+  font-family: 'B Mitra', 'Vazirmatn', sans-serif;
+  font-weight: bold;
   color:#c9a227;
   margin-bottom:14px;
   font-size:1rem;
@@ -888,9 +925,8 @@ function copyJson() {
   alert('کپی شد! حالا در فایل data.json گیت‌هاب جای‌گذاری کنید.');
 }
 
-// ===== شروع =====
-loadData();
+// ===== شروع =====loadData();
 setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
 </script>
 </body>
-  </html>
+      </html>
