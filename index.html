@@ -610,7 +610,7 @@ header {
     <div class="admin-section">
       <h4>📝 افزودن تکلیف</h4>
       <select class="admin-select" id="taskBookSelect"></select>
-      <input class="admin-input" type="text" id="taskDate" placeholder="📅 تاریخ تحویل (مثال: 1405/07/05)" maxlength="10" inputmode="numeric">
+      <input class="admin-input" type="text" id="taskDate" placeholder="📅 تاریخ تحویل (مثال: 1405/07/05 یا ۱۴۰۵/۰۷/۰۵)" maxlength="10">
       <textarea class="admin-textarea" id="taskDesc" placeholder="توضیحات (اختیاری)"></textarea>
       <button class="admin-btn" onclick="addTask()">➕ افزودن تکلیف</button>
     </div>
@@ -643,10 +643,29 @@ let lockUntil = 0;
 let lockMultiplier = 1;
 const ADMIN_PASSWORD = "0992049390952623571";
 
-// ===== اعتبارسنجی تاریخ شمسی =====
+// ===== تبدیل اعداد فارسی/عربی به انگلیسی =====
+function persianToEnglishDigits(str) {
+  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  const arabicDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  let result = str;
+  for (let i = 0; i < 10; i++) {
+    result = result.replace(new RegExp(persianDigits[i], 'g'), i);
+    result = result.replace(new RegExp(arabicDigits[i], 'g'), i);
+  }
+  return result;
+}
+
+// ===== تبدیل اعداد انگلیسی به فارسی (برای نمایش) =====
+function englishToPersianDigits(str) {
+  const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+  return String(str).replace(/\d/g, d => persianDigits[d]);
+}
+
+// ===== اعتبارسنجی تاریخ شمسی (پشتیبانی از اعداد فارسی و انگلیسی) =====
 function isValidPersianDate(str) {
-  if (!/^\d{4}\/\d{2}\/\d{2}$/.test(str)) return false;
-  const parts = str.split('/');
+  const normalized = persianToEnglishDigits(str);
+  if (!/^\d{4}\/\d{2}\/\d{2}$/.test(normalized)) return false;
+  const parts = normalized.split('/');
   const y = parseInt(parts[0]);
   const m = parseInt(parts[1]);
   const d = parseInt(parts[2]);
@@ -671,7 +690,7 @@ async function loadData() {
   render();
 }
 
-// ===== برگرداندن همه تکالیف (بدون فیلتر زمانی) =====
+// ===== برگرداندن همه تکالیف =====
 function getLiveTasks() {
   return data.tasks;
 }
@@ -724,7 +743,7 @@ function openBook(bookId) {
   } else {
     taskList.innerHTML = bookTasks.map(t => `
       <div class="task-item">
-        <div class="task-date">📅 تاریخ تحویل: ${t.date}</div>
+        <div class="task-date">📅 تاریخ تحویل: ${englishToPersianDigits(t.date)}</div>
         ${t.desc ? `<div class="task-desc">${escapeHtml(t.desc)}</div>` : ''}
       </div>
     `).join('');
@@ -833,7 +852,7 @@ function renderAdmin() {
     const book = data.books.find(b => b.id === t.bookId);
     return `
       <div class="item-row">
-        <span>📝 ${book ? book.name : '?'} — ${t.date}${t.desc ? ' — ' + t.desc.substring(0,30) : ''}</span>
+        <span>📝 ${book ? book.name : '?'} — ${englishToPersianDigits(t.date)}${t.desc ? ' — ' + t.desc.substring(0,30) : ''}</span>
         <button class="delete-btn" onclick="deleteTask('${t.id}')">حذف</button>
       </div>
     `;
@@ -883,13 +902,16 @@ function deleteBook(id) {
 
 function addTask() {
   const bookId = document.getElementById('taskBookSelect').value;
-  const date = document.getElementById('taskDate').value.trim();
+  let date = document.getElementById('taskDate').value.trim();
   const desc = document.getElementById('taskDesc').value.trim();
+
+  // تبدیل اعداد فارسی/عربی به انگلیسی برای ذخیره
+  date = persianToEnglishDigits(date);
 
   if (!bookId) { alert('کتاب را انتخاب کنید'); return; }
   if (!date) { alert('تاریخ تحویل را وارد کنید'); return; }
   if (!isValidPersianDate(date)) {
-    alert('فرمت تاریخ اشتباه است. لطفاً به صورت 1405/07/05 وارد کنید.');
+    alert('فرمت تاریخ اشتباه است.\nلطفاً به صورت 1405/07/05 یا ۱۴۰۵/۰۷/۰۵ وارد کنید.');
     return;
   }
 
@@ -925,8 +947,9 @@ function copyJson() {
   alert('کپی شد! حالا در فایل data.json گیت‌هاب جای‌گذاری کنید.');
 }
 
-// ===== شروع =====loadData();
+// ===== شروع =====
+loadData();
 setInterval(() => { render(); if (selectedBookId) openBook(selectedBookId); }, 60000);
 </script>
 </body>
-      </html>
+  </html>
