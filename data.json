@@ -176,8 +176,8 @@
     }
   ],
   "maintenance": {
-    "enabled": true,
-    "message": "کاربر گرامی\nسامانه موقتا بسته می‌باشد\nباتشکر از همکاری شما",
-    "reopenTime": "۱۴۰۵/۷/۱۶ _ پنجشنبه  -  ساعت: ۲۱:۰۰"
+    "enabled": false,
+    "message": "",
+    "reopenTime": ""
   }
 }
